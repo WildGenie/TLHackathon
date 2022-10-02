@@ -6,5 +6,5 @@ from app import app
 port = 8088
 
 if __name__ == '__main__':
-    print('Serving on {}...'.format(port))
+    print(f'Serving on {port}...')
     WSGIServer(('0.0.0.0', port), app).serve_forever()

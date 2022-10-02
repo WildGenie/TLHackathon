@@ -15,11 +15,10 @@ champions = load_champions()
 champions_custom = load_champions_custom()
 
 def get_champion_to_tags():
-    tags = {}
-    for champion in champions:
-        champion_id = int(champions[champion]['key'])
-        tags[champion_id] = champions[champion]['tags']
-    return tags
+    return {
+        int(champions[champion]['key']): champions[champion]['tags']
+        for champion in champions
+    }
 
 
 def get_tags():
@@ -30,12 +29,11 @@ def get_tags():
     return list(tags)
 
 def get_ids_to_custom():
-    name_to_id = {}
-    for champion in champions:
-        name_to_id[champion] = int(champions[champion]['key'])
-    
-    ids_to_custom = {}
-    for champion in champions_custom:
-        ids_to_custom[name_to_id[champion['Champion'].replace(' ','')]] = champion
+    name_to_id = {
+        champion: int(champions[champion]['key']) for champion in champions
+    }
 
-    return ids_to_custom
+    return {
+        name_to_id[champion['Champion'].replace(' ', '')]: champion
+        for champion in champions_custom
+    }

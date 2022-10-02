@@ -49,6 +49,9 @@ H = model.fit(x=trainX, y=trainY, validation_data=(testX, testY),
 predictions = model.predict(testX)
 
 for i in range(10):
-	print('{} => \t{} \npercent chance to be {} (correct {})'.format(testX[i].tolist(), predictions[i][0], int(predictions[i]), testY[i]))
+	print(
+		f'{testX[i].tolist()} => \t{predictions[i][0]} \npercent chance to be {int(predictions[i])} (correct {testY[i]})'
+	)
+
 
 model.save('model_5v5.h5')

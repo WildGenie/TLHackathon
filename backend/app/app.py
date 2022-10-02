@@ -22,10 +22,13 @@ def compare_teams():
     if len(team_1) == 0 or len(team_2) == 0:
         abort(400)
 
-    team_1_split = [int(i) for i in team_1.split(',')] 
+    team_1_split = [int(i) for i in team_1.split(',')]
     team_2_split = [int(i) for i in team_2.split(',')] 
 
-    ret = {}
-    ret['win_chance'] = ml.calculate_win_team_1_chance(team_1_split, team_2_split)
-    
+    ret = {
+        'win_chance': ml.calculate_win_team_1_chance(
+            team_1_split, team_2_split
+        )
+    }
+
     return jsonify(ret)
