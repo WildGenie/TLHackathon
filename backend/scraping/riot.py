@@ -21,7 +21,7 @@ def make_call(url, headers):
 @cached(cache=TTLCache(maxsize=1024, ttl=600), key=hash)
 def riot_request(endpoint, params={}):
 
-	url = '{}/{}?{}'.format(RIOT_HOST, endpoint, urllib.parse.urlencode(params))
+	url = f'{RIOT_HOST}/{endpoint}?{urllib.parse.urlencode(params)}'
 	print(url)
 
 	headers = {
@@ -36,43 +36,41 @@ def riot_request(endpoint, params={}):
 			pass
 
 	if r.status_code != 200:
-		raise Exception('Failed to make request to Riot\nStatus Code: {}'.format(r.status_code))
+		raise Exception(
+			f'Failed to make request to Riot\nStatus Code: {r.status_code}'
+		)
+
 
 	return r.json()
 
 
 # ------------------------------ Data Collection ------------------------------
 def get_account_id(player_name):
-	endpoint = 'lol/summoner/v4/summoners/by-name/{}'.format(player_name)
+	endpoint = f'lol/summoner/v4/summoners/by-name/{player_name}'
 	account_data = riot_request(endpoint)
 	return account_data['accountId']
 
 
 def get_account_matches(player_id, num_matches=100):
-	endpoint = 'lol/match/v4/matchlists/by-account/{}'.format(player_id)
+	endpoint = f'lol/match/v4/matchlists/by-account/{player_id}'
 
 	matches = []
 	for i in range(math.ceil(num_matches/100)):
 		match_data = riot_request(endpoint, { "beginIndex" : i * 100 } )
 
-		for match in match_data['matches']:
-			matches.append(match['gameId'])
-
+		matches.extend(match['gameId'] for match in match_data['matches'])
 	return matches
 
 
 def get_match_details(match_id):
 
-	endpoint = 'lol/match/v4/matches/{}'.format(match_id)
-	match_data = riot_request(endpoint)
-
-	return match_data
+	endpoint = f'lol/match/v4/matches/{match_id}'
+	return riot_request(endpoint)
 
 # ------------------------------ Data Manipulation ------------------------------
 def get_match_history(player_name):
 	account_id = get_account_id(player_name)
-	match_history = get_account_matches(account_id, NUM_MATCHES)
-	return match_history
+	return get_account_matches(account_id, NUM_MATCHES)
 
 
 def get_tons_of_matches(player_names):
@@ -87,7 +85,7 @@ def get_tons_of_matches(player_names):
 def get_expanded_matches(match_id_list):
 	expanded_matches = load_extended_matches()
 	for match_id in match_id_list:
-		print("{} matches recorded".format(len(expanded_matches)))
+		print(f"{len(expanded_matches)} matches recorded")
 		if str(match_id) in expanded_matches:
 			continue
 		match_details = get_match_details(match_id)

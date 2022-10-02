@@ -27,15 +27,15 @@ BLANK_PRIMARIES = {
             }
 
 def flatten_champion(champion_id):
-    flat = []
     champion_custom = champion_id_to_custom[champion_id]
-    flat.append(champion_custom['Damage'])
-    flat.append(champion_custom['Toughness'])
-    flat.append(champion_custom['Control'])
-    flat.append(champion_custom['Mobility'])
-    flat.append(champion_custom['Utility'])
-    flat.append(champion_custom['Damage Type'])
-    return flat
+    return [
+        champion_custom['Damage'],
+        champion_custom['Toughness'],
+        champion_custom['Control'],
+        champion_custom['Mobility'],
+        champion_custom['Utility'],
+        champion_custom['Damage Type'],
+    ]
 
 
 def order_team(tag_mapping, role_mapping):
@@ -45,19 +45,24 @@ def order_team(tag_mapping, role_mapping):
     ordered_list.extend(flatten_champion(role_mapping['MIDDLE']))
     ordered_list.extend(flatten_champion(role_mapping['BOTTOM']))
     ordered_list.extend(flatten_champion(role_mapping['UTILITY']))
-    ordered_list.append(tag_mapping['Skirmisher'])
-    ordered_list.append(tag_mapping['Juggernaut'])
-    ordered_list.append(tag_mapping['Battlemage'])
-    ordered_list.append(tag_mapping['Enchanter'])
-    ordered_list.append(tag_mapping['Catcher'])
-    ordered_list.append(tag_mapping['Artillery'])
-    ordered_list.append(tag_mapping['Burst'])
-    ordered_list.append(tag_mapping['Diver'])
-    ordered_list.append(tag_mapping['Warden'])
-    ordered_list.append(tag_mapping['Assassin'])
-    ordered_list.append(tag_mapping['Marksman'])
-    ordered_list.append(tag_mapping['Vanguard'])
-    ordered_list.append(tag_mapping['Specialist'])
+    ordered_list.extend(
+        (
+            tag_mapping['Skirmisher'],
+            tag_mapping['Juggernaut'],
+            tag_mapping['Battlemage'],
+            tag_mapping['Enchanter'],
+            tag_mapping['Catcher'],
+            tag_mapping['Artillery'],
+            tag_mapping['Burst'],
+            tag_mapping['Diver'],
+            tag_mapping['Warden'],
+            tag_mapping['Assassin'],
+            tag_mapping['Marksman'],
+            tag_mapping['Vanguard'],
+            tag_mapping['Specialist'],
+        )
+    )
+
     return ordered_list
 
 def calculate_team_primaries(team):
